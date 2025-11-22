@@ -25,7 +25,7 @@ int mostrar_menu_principal(int totalArticulos, int *cantidadMostrar) {
         printf("1. Ordenar por titulo (A-Z)\n");
         printf("2. Ordenar por cantidad de palabras en el titulo\n");
         printf("3. Ordenar por nombre de archivo (ruta)\n");
-        printf("4. Ordenar por anio\n");
+        printf("4. Ordenar por año\n");
         printf("5. Salir\n");
         printf("Seleccione una opcion (1-5): ");
 
@@ -148,16 +148,16 @@ int main() {
                 break;
                 
             case 4: // Ordenar por año
-                printf("\nOrdenando por anio...\n");
+                printf("\nOrdenando por año...\n");
                 // TODO: Función de Alina (heap numérico)
-                // ordenados = ordenar_por_anio(articulos, totalArticulos);
-                criterio = "anio";
+                // ordenados = ordenar_por_año(articulos, totalArticulos);
+                criterio = "año";
                 printf("Funcion aun no implementada (Parte A - heap numerico).\n");
                 break;
                 
             case 5: // Salir
                 printf("\n===========================================\n");
-                printf("Gracias por usar el sistema. ¡Hasta luego!\n");
+                printf("Gracias por usar nuestro sistema. Byebye :) \n");
                 printf("===========================================\n");
                 continuar = 0;
                 break;
