@@ -52,9 +52,16 @@ struct articulo extraer_min_heap_alfabetico(struct heap_alfabetico* heap);
 int heap_alfabetico_vacio(struct heap_alfabetico* heap);
 void destruir_heap_alfabetico(struct heap_alfabetico* heap);
 
+// Funciones de ordenamiento alfabético
+struct articulo* ordenar_por_titulo(struct articulo* articulos, int n);
+struct articulo* ordenar_por_nombre_archivo(struct articulo* articulos, int n);
+
 //FUNCIONES PARA LOS DOS
 int contar_palabras(const char *texto);
 struct articulo crear_articulo(const char* nombre, const char* apellido, const char* titulo, const char* ruta, int ano, const char* resumen);
 void liberar_articulo(struct articulo* art);
+
+// Función para cargar artículos desde archivo esto está en el file_parser.c
+struct articulo* cargar_articulos(const char* nombre_archivo, int* total);
 
 #endif
