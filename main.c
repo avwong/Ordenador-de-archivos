@@ -70,8 +70,7 @@ int mostrar_menu_principal(int totalArticulos, int *cantidadMostrar) {
     return opcion;
 }
 
-/* Función que imprime en pantalla los artículos ordenados de forma 
-clara y legible para el usuario 
+/* Función que imprime en pantalla los artículos ordenados de forma clara y legible para el usuario 
 E: articulos: array de artículos
    n: cantidad de artículos a mostrar
    criterio: criterio de ordenamiento (título, cantidad de palabras, ruta, año)
@@ -133,10 +132,8 @@ int main() {
                 
             case 2: // Ordenar por cantidad de palabras
                 printf("\nOrdenando por cantidad de palabras en el titulo...\n");
-                // TODO: Función de Alina (heap numérico)
-                // ordenados = ordenar_por_palabras_titulo(articulos, totalArticulos);
+                ordenados = ordenar_por_palabras_titulo(articulos, totalArticulos);
                 criterio = "cantidad de palabras en el titulo";
-                printf("Funcion aun no implementada (Parte A - heap numerico).\n");
                 break;
                 
             case 3: // Ordenar por nombre de archivo
@@ -147,10 +144,8 @@ int main() {
                 
             case 4: // Ordenar por año
                 printf("\nOrdenando por anio...\n");
-                // TODO: Función de Alina (heap numérico)
-                // ordenados = ordenar_por_año(articulos, totalArticulos);
+                ordenados = ordenar_por_ano(articulos, totalArticulos);
                 criterio = "año";
-                printf("Funcion aun no implementada (Parte A - heap numerico).\n");
                 break;
                 
             case 5: // Salir

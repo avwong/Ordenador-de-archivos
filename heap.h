@@ -33,6 +33,10 @@ struct articulo extraer_min_heap_numerico(struct heap_numerico* heap);
 int heap_numerico_vacio(struct heap_numerico* heap);
 void destruir_heap_numerico(struct heap_numerico* heap);
 
+// Funciones de ordenamiento numérico
+struct articulo* ordenar_por_ano(struct articulo* articulos, int n);
+struct articulo* ordenar_por_palabras_titulo(struct articulo* articulos, int n);
+
 //HEAP ALFABETICO: para nombre de archivo o titulo
 struct nodo_heap_alfabetico {
     struct articulo articulo;

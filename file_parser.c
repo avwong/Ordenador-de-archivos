@@ -70,7 +70,7 @@ static struct articulo parsear_linea(char* linea) {
 struct articulo* cargar_articulos(const char* nombre_archivo, int* total) {
     FILE* archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        fprintf(stderr, "Error: no se pudo abrir el archivo %s\n", nombre_archivo);
+        printf("Error: no se pudo abrir el archivo %s\n", nombre_archivo);
         return NULL;
     }
     
@@ -91,9 +91,9 @@ struct articulo* cargar_articulos(const char* nombre_archivo, int* total) {
     rewind(archivo);
     
     // Asignar memoria para todos los artículos
-    struct articulo* articulos = (struct articulo*) malloc(num_articulos * sizeof(struct articulo));
+    struct articulo* articulos = (struct articulo*) calloc(num_articulos, sizeof(struct articulo));
     if (articulos == NULL) {
-        fprintf(stderr, "Error: no se pudo asignar memoria para %d articulos\n", num_articulos);
+        printf("Error: no se pudo asignar memoria para %d articulos\n", num_articulos);
         fclose(archivo);
         return NULL;
     }
