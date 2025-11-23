@@ -122,22 +122,63 @@ void bajar_numerico(struct heap_numerico* heap, int padre) {
 /*
 E: capacidad inicial del heap
 S: puntero al heap que se acaba de crear, NULL si falla
+R: que el heap se cree correctamente
 */
 struct heap_numerico* crear_heap_numerico(int capacidad_inicial) {
     struct heap_numerico* heap = calloc(1, sizeof(struct heap_numerico));
+    
+    //por si no se le asigno memoria correcatmente
     if (heap == NULL) {
         printf("Error: no se pudo crear el heap numerico.\n");
         return NULL;
     }
 
-    heap->nodos = (struct nodo_heap_numerico*) malloc(capacidad_inicial * sizeof(struct nodo_heap_numerico));
+    //memoria para el arreglo de nodos
+    heap->nodos = calloc(capacidad_inicial, sizeof(struct nodo_heap_numerico));
     if (heap->nodos == NULL) {
         printf("Error: no se pudo asignar memoria para los nodos del heap numerico.\n");
-        free(heap);
+        free(heap); //libera el espacio que se agarro para el heap
         return NULL;
     }
 
-    heap->tamano = 0;
+    heap->tamano = 0; //inicia en 0 xq aun no tiene contenido
     heap->capacidad = capacidad_inicial;
     return heap;
+}
+
+/*
+verifica si el heap esta vacio
+E: puntero al heap
+S: 1 si esta vacio, 0 si no
+R: que el heap exista
+*/
+int heap_numerico_vacio(struct heap_numerico* heap) {
+    if (heap == NULL || heap->tamano == 0) {
+        return 1; //etsa vacio o no existe
+    }
+    return 0; //no esta vacio
+}
+
+/*
+inserta un articulo en el heap
+E: puntero al heap, articulo a insertar, llave
+S: void
+R: que el heap exista
+*/
+void insertar_heap_numerico(struct heap_numerico* heap, struct articulo articulo, int llave) {
+    if (heap == NULL) {
+        printf("Error: no se pudo insertar en heap numerico, el heap no existe.\n");
+        return;
+    }
+
+    //asegurar que haya espacio
+    asegurar_capacidad_numerico(heap);
+
+    //insertar el nuevo nodo al final
+    heap->nodos[heap->tamano].articulo = articulo;
+    heap->nodos[heap->tamano].llave = llave;
+    heap->tamano++;
+
+    //subir el nodo para mantener la propiedad del heap
+    subir_numerico(heap, heap->tamano - 1);
 }

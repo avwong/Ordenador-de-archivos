@@ -4,13 +4,14 @@
 #include <string.h>
 
 /*Función encargada de crear una copia en memoria de una cadena de caracteres
+"String duplicate"
 E: cadena de caracteres original
 S: puntero a la nueva cadena de caracteres en memoria
 */
 static char* mi_strdup(const char* cadena) {
     if (cadena == NULL) return NULL;
     size_t len = strlen(cadena) + 1; // +1 para el carácter nulo
-    char* copia = (char*) malloc(len); // Asinga memoria en el heap para la copia
+    char* copia = (char*) calloc(1, len); // Asinga memoria en el heap para la copia
     if (copia != NULL) {
         memcpy(copia, cadena, len); // Copia el contenido de la cadena original a la nueva ubicación
     }
