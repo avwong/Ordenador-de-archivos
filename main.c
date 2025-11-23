@@ -102,7 +102,7 @@ int main() {
     
     // acá se carga los artículos del archivo.txt
     printf("Cargando articulos desde archivo.txt...\n");
-    struct articulo* articulos = cargar_articulos("archivo.txt", &totalArticulos);
+    struct articulo* articulos = cargar_articulos("archivoClaseCompleto.txt", &totalArticulos);
     
     if (articulos == NULL) {
         fprintf(stderr, "Error: No se pudieron cargar los articulos.\n");
