@@ -1,20 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> 
-#include "heap.h"   // para struct articulo y los heaps
+#include "heap.h" // para struct articulo y los heaps
 
-// Limpia el buffer de entrada cuando hay basura
+// limpia el buffer de entrada cuando hay basura
 void limpiar_buffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {}
 }
 
-/*
- * Muestra el menú principal, valida la opción y también pregunta cuántos resultados mostrar.
- * E: totalArticulos, cuántos artículos hay en memoria
- * S: return opción elegida1-5
- *    *cantidadMostrar-> cuántos artículos mostrar (si la opción es 1-4)
- */
+/*muestra el menú principal, valida la opción y pregunta cuántos resultados mostrar
+E: totalArticulos (cuántos artículos hay en memoria), cantidadMostrar (puntero donde guardar cuántos artículos mostrar)
+S: opción elegida (1-5)
+R: que totalArticulos sea mayor a 0
+*/
 int mostrar_menu_principal(int totalArticulos, int *cantidadMostrar) {
     int opcion = 0;
 
@@ -42,8 +41,7 @@ int mostrar_menu_principal(int totalArticulos, int *cantidadMostrar) {
 
     } while (opcion < 1 || opcion > 5);
 
-    // Si elige una opcion de ordenamiento (1-4),
-    // preguntamos cuántos resultados mostrar
+    // Si elige una opcion de ordenamiento (1-4), preguntar cuántos resultados mostrar
     if (opcion >= 1 && opcion <= 4) {
         int cant = 0;
         do {
@@ -70,11 +68,11 @@ int mostrar_menu_principal(int totalArticulos, int *cantidadMostrar) {
     return opcion;
 }
 
-/* Función que imprime en pantalla los artículos ordenados de forma clara y legible para el usuario 
-E: articulos: array de artículos
-   n: cantidad de artículos a mostrar
-   criterio: criterio de ordenamiento (título, cantidad de palabras, ruta, año)
-S: */
+/*imprime en pantalla los artículos ordenados de forma clara y legible para el usuario
+E: articulos (arreglo de artículos), n (cantidad de artículos a mostrar), criterio (criterio de ordenamiento)
+S: void
+R: que articulos no sea NULL, que n sea mayor a 0
+*/
 void imprimir_articulos(struct articulo* articulos, int n, const char* criterio) {
     printf("\n");
     printf("========================================\n");
@@ -93,6 +91,7 @@ void imprimir_articulos(struct articulo* articulos, int n, const char* criterio)
     printf("Total de artículos mostrados: %d\n", n);
     printf("----------------------------------------\n");
 }
+
 int main() {
     int totalArticulos = 0;
     
@@ -161,8 +160,6 @@ int main() {
             imprimir_articulos(ordenados, cantidadMostrar, criterio);
             
             // Liberar memoria del array ordenado
-            // no se liberan los artículos individuales porque
-            // apuntan a los mismos strings que el array original
             free(ordenados);
         }
     }
