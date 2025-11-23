@@ -10,9 +10,7 @@ void limpiar_buffer() {
 }
 
 /*
- * Muestra el menú principal, valida la opción
- * y también pregunta cuántos resultados mostrar.
- *
+ * Muestra el menú principal, valida la opción y también pregunta cuántos resultados mostrar.
  * E: totalArticulos, cuántos artículos hay en memoria
  * S: return opción elegida1-5
  *    *cantidadMostrar-> cuántos artículos mostrar (si la opción es 1-4)

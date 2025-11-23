@@ -3,17 +3,12 @@
 #include <stdlib.h>  // malloc, free, realloc
 #include <string.h>  // strcmp, strlen, memcpy
 
-struct heap_numerico* crear_heap_numerico(int capacidad_inicial) {
-
-
-};
-
 /*
 E: puntero al heap , indices de los nodos a intercambiar
 S: void
 R: el heap debe existir, los indices deben ser validos
 */
-void intercambiar_nodos_numerico(struct heap_numerico* heap, int i, int j) {
+static void intercambiar_nodos_numerico(struct heap_numerico* heap, int i, int j) {
     
     //validaciones
     if (heap == NULL || i < 0 || j < 0 || i >= heap->tamano || j >= heap->tamano) {
@@ -28,11 +23,11 @@ void intercambiar_nodos_numerico(struct heap_numerico* heap, int i, int j) {
 
 /*
 Asegura que siempre haya espacio en el heap para agregar un nodo mas en caso de que se llegue a llenar el heap
-E: puntero al heap numérico 
+E: puntero al heap numérico
 S: void
 R: que exista el heap, que tenga capacidad mayor a 0
 */
-void asegurar_capacidad_numerico(struct heap_numerico* heap) {
+static void asegurar_capacidad_numerico(struct heap_numerico* heap) {
     
     //validacion: que exista el heap
     if (heap == NULL){
@@ -65,13 +60,13 @@ void asegurar_capacidad_numerico(struct heap_numerico* heap) {
     heap->capacidad = nueva_capacidad;
 }
 
-/* 
+/*
 Intercambia un nodo hijo con su padre si el nodo hijo es menor que el padre
 E: heap y el indice del nodo a mover hacia arriba
 S: void
 R: que el heap exista, asegurarse que el indice sea valido
 */
-void subir_numerico(struct heap_numerico* heap, int hijo) {
+static void subir_numerico(struct heap_numerico* heap, int hijo) {
     while (hijo > 0) {
         int padre = (hijo - 1) / 2; //formula para encontrar al padre
 
@@ -91,7 +86,7 @@ E: el heap  y el indice del nodo padre a mover hacia abajo
 S: void
 R: que el heap exista, asegurarse que el indice sea valido
 */
-void bajar_numerico(struct heap_numerico* heap, int padre) {
+static void bajar_numerico(struct heap_numerico* heap, int padre) {
     int izquierda, derecha, menor;
 
     while (1) { //para que se haga infinitamente (hasta que haya un break)
