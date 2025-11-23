@@ -5,11 +5,15 @@
 
 
 
-//helper local para copias la llave alfabética
+/*copia una llave alfabética en memoria
+E: llave a copiar
+S: puntero a la copia de la llave
+R: que la llave no sea NULL
+*/
 static char* copiar_llave_alfabetica(const char* llave) {
     if (llave == NULL) return NULL;
     size_t len = strlen(llave) + 1; // +1 para el carácter nulo
-    char* copia = (char*) calloc(1, len); // Asigna memoria en el heap para la copia
+    char* copia = calloc(1, len); // Asigna memoria en el heap para la copia
     if (copia != NULL) {
         memcpy(copia, llave, len); // Copia el contenido de la cadena original a la nueva ubicación
     }
@@ -18,18 +22,22 @@ static char* copiar_llave_alfabetica(const char* llave) {
 
 //funciones del heap alfabético
 
-/*función que intercamia dos nodos del heap alfabético
+/*intercambia dos nodos del heap alfabético
 E: punteros a los nodos a intercambiar
-*/  
+S: void
+R: que los punteros no sean NULL
+*/
 static void intercambiar_nodos_alfabetico(struct nodo_heap_alfabetico* a    , struct nodo_heap_alfabetico* b) {
     struct nodo_heap_alfabetico temp = *a;
     *a = *b;
     *b = temp;
 }
 
-/*función que asegura la capacidad del heap alfabético
-E: puntero al heap alfabético   
-*/      
+/*asegura que siempre haya espacio en el heap para agregar un nodo mas en caso de que se llegue a llenar el heap
+E: puntero al heap alfabético
+S: void
+R: que exista el heap, que tenga capacidad mayor a 0
+*/
 static void asegurar_capacidad_alfabetico(struct heap_alfabetico* heap) {
     if (heap->tamano < heap->capacidad) return;
 
@@ -53,7 +61,11 @@ static void asegurar_capacidad_alfabetico(struct heap_alfabetico* heap) {
     heap->capacidad = nueva_capacidad;
 }
 
-//heapify hacia arriba 
+/*intercambia un nodo hijo con su padre si el nodo hijo es menor alfabéticamente que el padre
+E: heap y el indice del nodo a mover hacia arriba
+S: void
+R: que el heap exista, asegurarse que el indice sea valido
+*/
 static void subir_alfabetico(struct heap_alfabetico* heap, int idx) {
     while (idx > 0) {
         int padre = (idx - 1) / 2;
@@ -65,7 +77,12 @@ static void subir_alfabetico(struct heap_alfabetico* heap, int idx) {
         }
     }
 }
-//heapify hacia abajo
+
+/*mueve un nodo hacia abajo en el heap para mantener la propiedad del min heap
+E: el heap y el indice del nodo padre a mover hacia abajo
+S: void
+R: que el heap exista, asegurarse que el indice sea valido
+*/
 static void bajar_alfabetico(struct heap_alfabetico* heap, int idx) {
     int izquierda, derecha, menor;
 
@@ -91,18 +108,19 @@ static void bajar_alfabetico(struct heap_alfabetico* heap, int idx) {
     }
 }
 
-/*funcion que crea un heap alfabético
-E: capacidad inicial, tamaño inicial del arreglo de nodos
-S: puntero al heap alfabético creado, null si falla 
+/*crea un heap alfabético
+E: capacidad inicial del heap
+S: puntero al heap que se acaba de crear, NULL si falla
+R: que el heap se cree correctamente
 */
 struct heap_alfabetico* crear_heap_alfabetico(int capacidad_inicial) {
-    struct heap_alfabetico* heap = (struct heap_alfabetico*) calloc(1, sizeof(struct heap_alfabetico));
+    struct heap_alfabetico* heap = calloc(1, sizeof(struct heap_alfabetico));
     if (heap == NULL) {
         fprintf(stderr, "Error: no se pudo crear el heap alfabetico.\n");
         return NULL;
     }
 
-    heap->nodos = (struct nodo_heap_alfabetico*) calloc(capacidad_inicial, sizeof(struct nodo_heap_alfabetico));
+    heap->nodos = calloc(capacidad_inicial, sizeof(struct nodo_heap_alfabetico));
     if (heap->nodos == NULL) {
         fprintf(stderr, "Error: no se pudo asignar memoria para los nodos del heap alfabetico.\n");
         free(heap);
@@ -114,64 +132,79 @@ struct heap_alfabetico* crear_heap_alfabetico(int capacidad_inicial) {
     return heap;
 }
 
-
+/*verifica si el heap esta vacio
+E: puntero al heap
+S: 1 si esta vacio, 0 si no
+R: que el heap exista
+*/
 int heap_alfabetico_vacio(struct heap_alfabetico* heap) {
     return (heap == NULL || heap->tamano == 0);
 }
 
-void insertar_heap_alfabetico(struct heap_alfabetico *heap,
-                              struct articulo articulo,
-                              const char *llave) {
+/*inserta un articulo en el heap alfabético
+E: puntero al heap, articulo a insertar, llave alfabética
+S: void
+R: que el heap exista, que la llave no sea NULL
+*/
+void insertar_heap_alfabetico(struct heap_alfabetico *heap, struct articulo articulo, const char *llave) {
+    //validaciones
     if (heap == NULL || llave == NULL) return;
 
     asegurar_capacidad_alfabetico(heap);
 
     int idx = heap->tamano;
 
-    // Copiamos el articulo por valor (NO liberamos aquí nunca)
+    //copiar el articulo por valor
     heap->nodos[idx].articulo = articulo;
 
-    // Guardamos copia de la llave
+    //guardar copia de la llave
     heap->nodos[idx].llave = copiar_llave_alfabetica(llave);
 
     heap->tamano++;
 
     subir_alfabetico(heap, idx);
 }
-/* Funcion que se encarga de extraer el artículo con la llave alfabética mínima del heap
+
+/*extrae el articulo con la llave alfabética mínima del heap
 E: puntero al heap alfabético
-S: artículo con la llave alfabética mínima
- */
+S: articulo con la llave alfabética mínima
+R: que el heap exista y no este vacio
+*/
 struct articulo extraer_min_heap_alfabetico(struct heap_alfabetico* heap) {
-    // Artículo vacío por si algo sale mal
+    //artículo vacío por si algo sale mal
     struct articulo vacio = {NULL, NULL, NULL, NULL, 0, NULL};
 
+    //validaciones
     if (heap == NULL || heap->tamano == 0) {
         return vacio;
     }
 
-    // se guarda el nodo mínimo para devolverlo
+    // guardar el nodo mínimo para devolverlo
     struct nodo_heap_alfabetico min_nodo = heap->nodos[0];
 
-    // Se reemplaza la raíz con el último nodo y reducimos el tamaño
+    //se reemplaza la raíz con el último nodo y se reduce el tamaño
     heap->tamano--;
     if (heap->tamano > 0) {
         heap->nodos[0] = heap->nodos[heap->tamano];
         bajar_alfabetico(heap, 0);
     }
 
-    // se libera la memoria de la llave del nodo mínimo
+    //se libera la memoria de la llave del nodo mínimo
     free(min_nodo.llave);
 
-    // No se libera
     return min_nodo.articulo;
 }
 
+/*destruye el heap alfabético y libera la memoria
+E: puntero al heap a destruir
+S: void
+R: que el heap exista
+*/
 void destruir_heap_alfabetico(struct heap_alfabetico* heap) {
+    //validacion
     if (heap == NULL) return;
 
-    // Solo se libera las llaves y el arreglo de nodos.
-    // no liberamos los articulos porque no son de este heap.
+    //liberar la memoria de las llaves y el arreglo de nodos
     for (int i = 0; i < heap->tamano; i++) {
         free(heap->nodos[i].llave);
     }
@@ -182,86 +215,84 @@ void destruir_heap_alfabetico(struct heap_alfabetico* heap) {
 
 //Funciones de ordenamiento alfabético
 
-/*
- * Ordena un array de artículos por título alfabéticamente (A-Z)
- * E: articulos - array de artículos
- *    n - cantidad de artículos
- * S: nuevo array con artículos ordenados por título
- */
+/*ordena un arreglo de artículos por título alfabéticamente (A-Z)
+E: articulos (arreglo de artículos), n = cantidad de artículos
+S: nuevo arreglo con artículos ordenados por título
+R: que el arreglo exista y hayan artículos
+*/
 struct articulo* ordenar_por_titulo(struct articulo* articulos, int n) {
     //Validar
     if (articulos == NULL || n <= 0) {
         return NULL;
     }
 
-    // Crear heap alfabético
+    //crear heap alfabético
     struct heap_alfabetico* heap = crear_heap_alfabetico(n); // capacidad inicial = n
     if (heap == NULL) {
         fprintf(stderr, "Error: no se pudo crear heap para ordenar por titulo.\n");
         return NULL;
     }
 
-    // Insertar todos los artículos usando el título como llave
+    //insertar todos los artículos usando el título como llave
     for (int i = 0; i < n; i++) {
         insertar_heap_alfabetico(heap, articulos[i], articulos[i].titulo_articulo);
     }
 
-    // crea array para artículos ordenados
-    struct articulo* ordenados = (struct articulo*) calloc(n, sizeof(struct articulo));
+    //crear arreglo para artículos ordenados
+    struct articulo* ordenados = calloc(n, sizeof(struct articulo));
     if (ordenados == NULL) {
         fprintf(stderr, "Error: no se pudo asignar memoria para array ordenado.\n");
         destruir_heap_alfabetico(heap);
         return NULL;
     }
 
-    // Extraen artículos del heap que salen ya ordenados alfabéticamente
+    //extraer artículos del heap que salen ya ordenados alfabéticamente
     for (int i = 0; i < n; i++) {
         ordenados[i] = extraer_min_heap_alfabetico(heap);
     }
 
-    // Destruir el heap y retornar
+    //destruir el heap y retornar
     destruir_heap_alfabetico(heap);
     return ordenados;
 }
 
-/*
- * Ordena un array de artículos por nombre de archivo (ruta) alfabéticamente
- * E: articulos - array de artículos
- *    n - cantidad de artículos
- * S: nuevo array con artículos ordenados por ruta
- */
+/*ordena un arreglo de artículos por nombre de archivo (ruta) alfabéticamente
+E: articulos (arreglo de artículos), n = cantidad de artículos
+S: nuevo arreglo con artículos ordenados por ruta
+R: que el arreglo exista y hayan artículos
+*/
 struct articulo* ordenar_por_nombre_archivo(struct articulo* articulos, int n) {
-    // Validar 
+    //validar 
     if (articulos == NULL || n <= 0) {
         return NULL;
     }
 
-    // Crear heap alfabético
+    //crear heap alfabético
     struct heap_alfabetico* heap = crear_heap_alfabetico(n);
     if (heap == NULL) {
         fprintf(stderr, "Error: no se pudo crear heap para ordenar por archivo.\n");
         return NULL;
     }
 
-    // Insertar todos los artículos usando la RUTA como llave
+    //insertar todos los artículos usando la RUTA como llave
     for (int i = 0; i < n; i++) {
         insertar_heap_alfabetico(heap, articulos[i], articulos[i].ruta);
     }
 
-    // Crear array para artículos ordenados
-    struct articulo* ordenados = (struct articulo*) calloc(n, sizeof(struct articulo));
+    //crear arreglo para artículos ordenados
+    struct articulo* ordenados = calloc(n, sizeof(struct articulo));
     if (ordenados == NULL) {
         fprintf(stderr, "Error: no se pudo asignar memoria para array ordenado.\n");
         destruir_heap_alfabetico(heap);
         return NULL;
     }
 
-    // se extraen artículos del heap (saldrán ordenados por su ruta)
+    //extraer artículos del heap (saldrán ordenados por su ruta)
     for (int i = 0; i < n; i++) {
         ordenados[i] = extraer_min_heap_alfabetico(heap);
     }
 
-    // Destruir el heap y retornar
+    //destruir el heap y retornar
     destruir_heap_alfabetico(heap);
     return ordenados;
 }

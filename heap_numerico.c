@@ -226,3 +226,90 @@ void destruir_heap_numerico(struct heap_numerico* heap) {
     free(heap->nodos);
     free(heap);
 }
+
+//Funciones de ordenamiento numérico
+
+/*
+ Ordena un array de artículos por año (menor a mayor)
+ E: articulos (arreglo de artículos), n = cantidad de artículos
+ S: nuevo arreglo con artículos ordenados por año
+ R: que el arreglo exista y hayan artículos
+ */
+struct articulo* ordenar_por_ano(struct articulo* articulos, int n) {
+    //validar
+    if (articulos == NULL || n <= 0) {
+        return NULL;
+    }
+
+    //crear heap numérico
+    struct heap_numerico* heap = crear_heap_numerico(n);
+    if (heap == NULL) {
+        printf("Error: no se pudo crear heap para ordenar por año.\n");
+        return NULL;
+    }
+
+    //insertar todos los artículos usando el año como llave
+    for (int i = 0; i < n; i++) {
+        insertar_heap_numerico(heap, articulos[i], articulos[i].ano);
+    }
+
+    //crear arreglo para artículos ordenados
+    struct articulo* ordenados = calloc(n, sizeof(struct articulo));
+    if (ordenados == NULL) {
+        printf("Error: no se pudo asignar memoria para arreglo ordenado.\n");
+        destruir_heap_numerico(heap);
+        return NULL;
+    }
+
+    //extraer artículos del heap que salen ya ordenados por año
+    for (int i = 0; i < n; i++) {
+        ordenados[i] = extraer_min_heap_numerico(heap);
+    }
+
+    // destruir el heap y retornar los artículos ordenados
+    destruir_heap_numerico(heap);
+    return ordenados;
+}
+
+/*
+Ordena un array de artículos por cantidad de palabras en el título (menor a mayor)
+E: articulos (arreglo de artículos), n = cantidad de artículos
+S: nuevo arreglo con artículos ordenados por cantidad de palabras
+R: que el arreglo exista y hayan artículos
+ */
+struct articulo* ordenar_por_palabras_titulo(struct articulo* articulos, int n) {
+    //validar
+    if (articulos == NULL || n <= 0) {
+        return NULL;
+    }
+
+    // Crear heap numérico
+    struct heap_numerico* heap = crear_heap_numerico(n);
+    if (heap == NULL) {
+        printf("Error: no se pudo crear heap para ordenar por palabras.\n");
+        return NULL;
+    }
+
+    //insertar todos los artículos usando la cantidad de palabras como llave
+    for (int i = 0; i < n; i++) {
+        int num_palabras = contar_palabras(articulos[i].titulo_articulo);
+        insertar_heap_numerico(heap, articulos[i], num_palabras);
+    }
+
+    //crear arreglo para artículos ordenados
+    struct articulo* ordenados = calloc(n, sizeof(struct articulo));
+    if (ordenados == NULL) {
+        printf("Error: no se pudo asignar memoria para arreglo ordenado.\n");
+        destruir_heap_numerico(heap);
+        return NULL;
+    }
+
+    //extraer artículos del heap que salen ya ordenados por cantidad de palabras
+    for (int i = 0; i < n; i++) {
+        ordenados[i] = extraer_min_heap_numerico(heap);
+    }
+
+    //destruir el heap y retornar los artículos ordenados
+    destruir_heap_numerico(heap);
+    return ordenados;
+}

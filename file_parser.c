@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * Lee una línea del archivo y la parsea en un artículo
- * Formato: nombre|apellido|titulo|ruta|año|resumen|
- * E: linea, string con el formato especificado
- * S: estructura articulo con los datos parseados
- */
+/*lee una línea del archivo y la parsea en un artículo
+formato esperado: nombre|apellido|titulo|ruta|año|resumen|
+E: linea (string con el formato especificado)
+S: estructura articulo con los datos parseados
+R: que la linea tenga el formato correcto con delimitador "|"
+*/
 static struct articulo parsear_linea(char* linea) {
-    // Remover salto de línea si existe
+    //remover salto de línea si existe
     size_t len = strlen(linea);
     if (len > 0 && linea[len-1] == '\n') {
         linea[len-1] = '\0';
@@ -19,7 +19,7 @@ static struct articulo parsear_linea(char* linea) {
         linea[len-2] = '\0';
     }
     
-    // Crear artículo usando la función de heap.c
+    //crear artículo usando la función de heap.c
     char* nombre = NULL;
     char* apellido = NULL;
     char* titulo = NULL;
@@ -27,7 +27,7 @@ static struct articulo parsear_linea(char* linea) {
     int ano = 0;
     char* resumen = NULL;
     
-    // Parsear usando strtok con delimitador "|"
+    //parsear usando strtok con delimitador "|"
     char* token;
     int campo = 0;
     
@@ -57,29 +57,28 @@ static struct articulo parsear_linea(char* linea) {
         token = strtok(NULL, "|");
     }
     
-    // Crear y retornar el artículo
+    //crear y retornar el artículo
     return crear_articulo(nombre, apellido, titulo, ruta, ano, resumen);
 }
 
-/*
- * Carga todos los artículos desde el archivo índice
- * E: nombre_archivo que es la ruta al archivo.txt
- *    total q es el puntero donde guardar la cantidad de artículos cargados
- * S: array dinámico con todos los artículos, o null si falla
- */
+/*carga todos los artículos desde el archivo índice
+E: nombre_archivo (ruta al archivo.txt), total (puntero donde guardar la cantidad de artículos cargados)
+S: arreglo dinámico con todos los artículos, NULL si falla
+R: que el archivo exista y tenga el formato correcto
+*/
 struct articulo* cargar_articulos(const char* nombre_archivo, int* total) {
     FILE* archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        fprintf(stderr, "Error: no se pudo abrir el archivo %s\n", nombre_archivo);
+        printf("Error: no se pudo abrir el archivo %s\n", nombre_archivo);
         return NULL;
     }
     
-    // Contar líneas primero
+    //contar líneas primero
     int num_articulos = 0;
     char buffer[4096]; // Buffer grande para líneas largas (resúmenes extensos)
     
     while (fgets(buffer, sizeof(buffer), archivo) != NULL) {
-        // Ignorar líneas vacías
+        //ignorar líneas vacías
         if (strlen(buffer) > 1) {
             num_articulos++;
         }
@@ -87,21 +86,21 @@ struct articulo* cargar_articulos(const char* nombre_archivo, int* total) {
     
     printf("Se encontraron %d articulos en el archivo.\n", num_articulos);
     
-    // Volver al inicio del archivo
+    //volver al inicio del archivo
     rewind(archivo);
     
-    // Asignar memoria para todos los artículos
-    struct articulo* articulos = (struct articulo*) malloc(num_articulos * sizeof(struct articulo));
+    //asignar memoria para todos los artículos
+    struct articulo* articulos = (struct articulo*) calloc(num_articulos, sizeof(struct articulo));
     if (articulos == NULL) {
-        fprintf(stderr, "Error: no se pudo asignar memoria para %d articulos\n", num_articulos);
+        printf("Error: no se pudo asignar memoria para %d articulos\n", num_articulos);
         fclose(archivo);
         return NULL;
     }
     
-    // Leer y parsear cada línea
+    //leer y parsear cada línea
     int i = 0;
     while (fgets(buffer, sizeof(buffer), archivo) != NULL && i < num_articulos) {
-        // Ignorar líneas vacías
+        //ignorar líneas vacías
         if (strlen(buffer) > 1) {
             articulos[i] = parsear_linea(buffer);
             i++;
