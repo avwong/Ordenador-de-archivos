@@ -167,18 +167,67 @@ R: que el heap exista
 */
 void insertar_heap_numerico(struct heap_numerico* heap, struct articulo articulo, int llave) {
     if (heap == NULL) {
-        printf("Error: no se pudo insertar en heap numerico, el heap no existe.\n");
+        printf("Error: el heap no existe.\n");
         return;
     }
 
-    //asegurar que haya espacio
+    //asegurar que haya espacio para un nodo mas
     asegurar_capacidad_numerico(heap);
 
     //insertar el nuevo nodo al final
     heap->nodos[heap->tamano].articulo = articulo;
     heap->nodos[heap->tamano].llave = llave;
-    heap->tamano++;
 
-    //subir el nodo para mantener la propiedad del heap
+    heap->tamano++; //el heap incrementa con un nodo mas
+
+    //ver si subir el nodo para mantener la propiedad del heap
     subir_numerico(heap, heap->tamano - 1);
+}
+
+/*
+Extrae el articulo con la llave minima del heap
+E: puntero al heap
+S: articulo con la llave minima
+R: que el heap exista y no este vacio
+*/
+struct articulo extraer_min_heap_numerico(struct heap_numerico* heap) {
+    
+    //para retornar en caso de error
+    struct articulo art_vacio = {NULL, NULL, NULL, NULL, 0};
+    
+    //validaciones
+    if (heap == NULL || heap->tamano == 0) {
+        printf("Error: no se puede extraer de un heap vacio o inexistente.\n");
+        return art_vacio;
+    }
+
+    struct nodo_heap_numerico min_nodo = heap->nodos[0]; //el nodo con la llave minima esta en la raiz
+
+    heap->tamano--; //disminuye el tamaño del heap
+
+    //si aun hay nodos, mover el ultimo a la raiz y bajar para mantener la propiedad del heap
+    if (heap->tamano > 0) {
+        heap->nodos[0] = heap->nodos[heap->tamano];
+        bajar_numerico(heap, 0);
+    }
+
+    return min_nodo.articulo;
+}
+
+/*
+E: puntero al heap a destruir
+S: void
+R: que el heap exista
+*/
+void destruir_heap_numerico(struct heap_numerico* heap) {
+    
+    //validacion
+    if (heap == NULL) {
+        printf("Error: el heap no existe.\n");
+        return;
+    }
+
+    //liberrar el arreglo de nodos y el heap entero
+    free(heap->nodos);
+    free(heap);
 }
