@@ -17,7 +17,7 @@ struct articulo {
 //HEAP NUMERICO: para cantidad de palabras en el titulo
 struct nodo_heap_numerico {
     struct articulo articulo;
-    int llave;  //TODO: Llave numérica?
+    int llave;
 };
 
 struct heap_numerico {
