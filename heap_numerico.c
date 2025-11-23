@@ -86,3 +86,58 @@ void subir_numerico(struct heap_numerico* heap, int hijo) {
     }
 };
 
+/*
+E: el heap  y el indice del nodo padre a mover hacia abajo
+S: void
+R: que el heap exista, asegurarse que el indice sea valido
+*/
+void bajar_numerico(struct heap_numerico* heap, int padre) {
+    int izquierda, derecha, menor;
+
+    while (1) { //para que se haga infinitamente (hasta que haya un break)
+        
+        //formulas para llegar a hijos
+        izquierda = 2 * padre + 1;
+        derecha = 2 * padre + 2;
+        menor = padre;
+
+        //verificar que de ese lado existan hijos y comparar llaves
+        if (izquierda < heap->tamano && heap->nodos[izquierda].llave < heap->nodos[menor].llave) {
+            menor = izquierda;
+        }
+        if (derecha < heap->tamano && heap->nodos[derecha].llave < heap->nodos[menor].llave) {
+            menor = derecha;
+        }
+
+        //para que no se intente de intercambiar con si mismo en caso de que el padre sea menor
+        if (menor != padre) { 
+            intercambiar_nodos_numerico(heap, padre, menor);
+            padre = menor;
+        } else { 
+            break;
+        }
+    }
+}
+
+/*
+E: capacidad inicial del heap
+S: puntero al heap que se acaba de crear, NULL si falla
+*/
+struct heap_numerico* crear_heap_numerico(int capacidad_inicial) {
+    struct heap_numerico* heap = calloc(1, sizeof(struct heap_numerico));
+    if (heap == NULL) {
+        printf("Error: no se pudo crear el heap numerico.\n");
+        return NULL;
+    }
+
+    heap->nodos = (struct nodo_heap_numerico*) malloc(capacidad_inicial * sizeof(struct nodo_heap_numerico));
+    if (heap->nodos == NULL) {
+        printf("Error: no se pudo asignar memoria para los nodos del heap numerico.\n");
+        free(heap);
+        return NULL;
+    }
+
+    heap->tamano = 0;
+    heap->capacidad = capacidad_inicial;
+    return heap;
+}
