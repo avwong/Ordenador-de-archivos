@@ -9,7 +9,7 @@
 static char* copiar_llave_alfabetica(const char* llave) {
     if (llave == NULL) return NULL;
     size_t len = strlen(llave) + 1; // +1 para el carácter nulo
-    char* copia = (char*) calloc(1, len); // Asigna memoria en el heap para la copia
+    char* copia = calloc(1, len); // Asigna memoria en el heap para la copia
     if (copia != NULL) {
         memcpy(copia, llave, len); // Copia el contenido de la cadena original a la nueva ubicación
     }
@@ -96,13 +96,13 @@ E: capacidad inicial, tamaño inicial del arreglo de nodos
 S: puntero al heap alfabético creado, null si falla 
 */
 struct heap_alfabetico* crear_heap_alfabetico(int capacidad_inicial) {
-    struct heap_alfabetico* heap = (struct heap_alfabetico*) calloc(1, sizeof(struct heap_alfabetico));
+    struct heap_alfabetico* heap = calloc(1, sizeof(struct heap_alfabetico));
     if (heap == NULL) {
         fprintf(stderr, "Error: no se pudo crear el heap alfabetico.\n");
         return NULL;
     }
 
-    heap->nodos = (struct nodo_heap_alfabetico*) calloc(capacidad_inicial, sizeof(struct nodo_heap_alfabetico));
+    heap->nodos = calloc(capacidad_inicial, sizeof(struct nodo_heap_alfabetico));
     if (heap->nodos == NULL) {
         fprintf(stderr, "Error: no se pudo asignar memoria para los nodos del heap alfabetico.\n");
         free(heap);
@@ -207,7 +207,7 @@ struct articulo* ordenar_por_titulo(struct articulo* articulos, int n) {
     }
 
     // crea array para artículos ordenados
-    struct articulo* ordenados = (struct articulo*) calloc(n, sizeof(struct articulo));
+    struct articulo* ordenados = calloc(n, sizeof(struct articulo));
     if (ordenados == NULL) {
         fprintf(stderr, "Error: no se pudo asignar memoria para array ordenado.\n");
         destruir_heap_alfabetico(heap);
@@ -249,7 +249,7 @@ struct articulo* ordenar_por_nombre_archivo(struct articulo* articulos, int n) {
     }
 
     // Crear array para artículos ordenados
-    struct articulo* ordenados = (struct articulo*) calloc(n, sizeof(struct articulo));
+    struct articulo* ordenados = calloc(n, sizeof(struct articulo));
     if (ordenados == NULL) {
         fprintf(stderr, "Error: no se pudo asignar memoria para array ordenado.\n");
         destruir_heap_alfabetico(heap);
