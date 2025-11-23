@@ -6,7 +6,7 @@
 
 
 //helper local para copias la llave alfabética
-static char* copiar_llave_alfabetica(const char* llave) {
+char* copiar_llave_alfabetica(const char* llave) {
     if (llave == NULL) return NULL;
     size_t len = strlen(llave) + 1; // +1 para el carácter nulo
     char* copia = (char*) malloc(len); // Asigna memoria en el heap para la copia
@@ -21,7 +21,7 @@ static char* copiar_llave_alfabetica(const char* llave) {
 /*función que intercamia dos nodos del heap alfabético
 E: punteros a los nodos a intercambiar
 */  
-static void intercambiar_nodos_alfabetico(struct nodo_heap_alfabetico* a    , struct nodo_heap_alfabetico* b) {
+void intercambiar_nodos_alfabetico(struct nodo_heap_alfabetico* a    , struct nodo_heap_alfabetico* b) {
     struct nodo_heap_alfabetico temp = *a;
     *a = *b;
     *b = temp;
@@ -30,7 +30,7 @@ static void intercambiar_nodos_alfabetico(struct nodo_heap_alfabetico* a    , st
 /*función que asegura la capacidad del heap alfabético
 E: puntero al heap alfabético   
 */      
-static void asegurar_capacidad_alfabetico(struct heap_alfabetico* heap) {
+void asegurar_capacidad_alfabetico(struct heap_alfabetico* heap) {
     if (heap->tamano < heap->capacidad) return;
 
     int nueva_capacidad = heap->capacidad * 2;
@@ -54,7 +54,7 @@ static void asegurar_capacidad_alfabetico(struct heap_alfabetico* heap) {
 }
 
 //heapify hacia arriba 
-static void subir_alfabetico(struct heap_alfabetico* heap, int idx) {
+void subir_alfabetico(struct heap_alfabetico* heap, int idx) {
     while (idx > 0) {
         int padre = (idx - 1) / 2;
         if (strcmp(heap->nodos[idx].llave, heap->nodos[padre].llave) < 0) {
@@ -66,7 +66,7 @@ static void subir_alfabetico(struct heap_alfabetico* heap, int idx) {
     }
 }
 //heapify hacia abajo
-static void bajar_alfabetico(struct heap_alfabetico* heap, int idx) {
+void bajar_alfabetico(struct heap_alfabetico* heap, int idx) {
     int izquierda, derecha, menor;
 
     while (1) {
