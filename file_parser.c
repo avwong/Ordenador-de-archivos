@@ -9,7 +9,7 @@
  * E: linea, string con el formato especificado
  * S: estructura articulo con los datos parseados
  */
-struct articulo parsear_linea(char* linea) {
+static struct articulo parsear_linea(char* linea) {
     // Remover salto de línea si existe
     size_t len = strlen(linea);
     if (len > 0 && linea[len-1] == '\n') {
