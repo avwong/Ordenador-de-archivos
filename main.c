@@ -22,7 +22,7 @@ int mostrar_menu_principal(int totalArticulos, int *cantidadMostrar) {
         printf("1. Ordenar por titulo (A-Z)\n");
         printf("2. Ordenar por cantidad de palabras en el titulo\n");
         printf("3. Ordenar por nombre de archivo (ruta)\n");
-        printf("4. Ordenar por anio\n");
+        printf("4. Ordenar por año\n");
         printf("5. Salir\n");
         printf("Seleccione una opcion (1-5): ");
 
