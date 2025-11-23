@@ -14,7 +14,7 @@ struct articulo {
     char* resumen;
 };
 
-//HEAP NUMERICO: para cantidad de palabras en el titulo
+//HEAP NUMERICO: para cantidad de palabras en el titulo y año
 struct nodo_heap_numerico {
     struct articulo articulo;
     int llave;
